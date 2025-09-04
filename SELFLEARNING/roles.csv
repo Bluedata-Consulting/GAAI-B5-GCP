@@ -1,0 +1,11 @@
+role,skills,tools
+Data Scientist,Statistical Modeling;Machine Learning;Data Visualization;Programming;Communication,Python (Scikit-learn, TensorFlow, PyTorch);R;SQL;Tableau;Power BI;Cloud Platforms (AWS, Azure, GCP)
+Machine Learning Engineer,Model Deployment;Model Optimization;Software Engineering;DevOps;Cloud Computing,Kubernetes;Docker;AWS SageMaker;Azure Machine Learning;GCP Vertex AI;Python;Java;C++
+Data Engineer,Data Pipeline Development;ETL Processes;Data Warehousing;Database Management;Cloud Computing,SQL;Spark;Hadoop;Kafka;Airflow;AWS Glue;Azure Data Factory;GCP Dataflow
+AI Research Scientist,Deep Learning;Natural Language Processing;Computer Vision;Reinforcement Learning;Algorithm Design,Python (TensorFlow, PyTorch);C++;Mathematical Modeling Software (e.g., MATLAB);Cloud Platforms (AWS, Azure, GCP)
+Data Analyst,Data Analysis;Data Visualization;Statistical Analysis;SQL;Communication,SQL;Excel;Tableau;Power BI;Python (Pandas, Matplotlib, Seaborn);R
+Business Intelligence Analyst,Data Analysis;Data Visualization;Reporting;SQL;Business Acumen,SQL;Tableau;Power BI;Excel;Data Modeling Tools
+AI Product Manager,Product Strategy;Market Research;Technical Understanding;Communication;Project Management,Jira;Confluence;Product Analytics Tools;Data Analysis Tools
+Data Architect,Data Modeling;Database Design;Data Governance;Cloud Architecture;ETL Architecture,SQL;NoSQL Databases;Data Modeling Tools (e.g., ERwin);Cloud Platforms (AWS, Azure, GCP);Data Governance Tools
+NLP Engineer,Natural Language Processing;Text Mining;Sentiment Analysis;Machine Translation;Deep Learning,Python (NLTK, SpaCy, Transformers);TensorFlow;PyTorch;Cloud NLP Services (e.g., AWS Comprehend, Azure Text Analytics)
+Computer Vision Engineer,Image Processing;Object Detection;Image Classification;Deep Learning;Video Analysis,Python (OpenCV, TensorFlow, PyTorch);C++;CUDA;Cloud Vision Services (e.g., AWS Rekognition, Azure Computer Vision)
