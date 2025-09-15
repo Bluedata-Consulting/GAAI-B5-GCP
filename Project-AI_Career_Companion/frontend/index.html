@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Career Companion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>AI Career Companion</h1>
+    <p>Personalized AI-powered career planning assistant</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="skills">Skills Gap</button>
+    <button class="tab-btn" data-tab="plan">Career Plan</button>
+    <button class="tab-btn" data-tab="review">Performance Review</button>
+    <button class="tab-btn" data-tab="mentor">Mentorship</button>
+  </nav>
+
+  <main>
+    <!-- Skills Gap -->
+    <section id="skills" class="tab-content active">
+      <h2>Skills Gap Analysis</h2>
+      <form id="skillsForm">
+        <label>Current Role:</label>
+        <input type="text" id="skillsCurrentRole" required>
+
+        <label>Target Role:</label>
+        <input type="text" id="skillsTargetRole" required>
+
+        <label>Current Skills (comma separated):</label>
+        <input type="text" id="skillsList">
+
+        <label>Required Skills (comma separated):</label>
+        <input type="text" id="desiredSkills">
+
+        <button type="submit">Analyze</button>
+      </form>
+      <div class="result-box" id="skillsResult"></div>
+    </section>
+
+    <!-- Career Plan -->
+    <section id="plan" class="tab-content">
+      <h2>Career Plan Generator</h2>
+      <form id="planForm">
+        <label>Current Role:</label>
+        <input type="text" id="planCurrentRole" required>
+
+        <label>Target Role:</label>
+        <input type="text" id="planTargetRole" required>
+
+        <label>Available Trainings (comma separated):</label>
+        <input type="text" id="planTrainings">
+
+        <button type="submit">Generate Plan</button>
+      </form>
+      <div class="result-box" id="planResult"></div>
+    </section>
+
+    <!-- Performance Review -->
+    <section id="review" class="tab-content">
+      <h2>Performance Review Assistant</h2>
+      <form id="reviewForm">
+        <label>Employee Name:</label>
+        <input type="text" id="reviewName" required>
+
+        <label>Achievements (comma separated):</label>
+        <input type="text" id="reviewAchievements">
+
+        <label>Challenges (comma separated):</label>
+        <input type="text" id="reviewChallenges">
+
+        <label>Goals (optional, comma separated):</label>
+        <input type="text" id="reviewGoals">
+
+        <button type="submit">Generate Review</button>
+      </form>
+      <div class="result-box" id="reviewResult"></div>
+    </section>
+
+    <!-- Mentorship -->
+    <section id="mentor" class="tab-content">
+      <h2>Mentorship Simulation</h2>
+      <form id="mentorForm">
+        <label>Role:</label>
+        <input type="text" id="mentorRole" required>
+
+        <label>Scenario:</label>
+        <textarea id="mentorScenario" rows="3" required></textarea>
+
+        <button type="submit">Ask Mentor</button>
+      </form>
+      <div class="result-box" id="mentorResult"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Powered by Azure OpenAI · FastAPI · MLflow · Application Insights</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

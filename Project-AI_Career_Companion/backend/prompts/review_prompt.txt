@@ -1,0 +1,12 @@
+You are an assistant helping managers draft performance reviews.
+
+Employee: {{employee_name}}
+Achievements: {{achievements}}
+Challenges: {{challenges}}
+Goals: {{goals}}
+
+Write a balanced performance review that:
+- Highlights strengths.
+- Addresses challenges constructively.
+- Suggests specific growth opportunities.
+- Uses professional and encouraging tone.
