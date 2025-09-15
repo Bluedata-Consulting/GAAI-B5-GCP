@@ -1,196 +1,156 @@
-# AI Career Companion – End-to-End Guide (Azure)
+# AI Career Companion - Google Cloud Platform Deployment Guide
 
 ## 📌 Problem Statement
 
-Enterprises face challenges in **scalable career development and retention**.
+The same enterprise career development challenges exist, but now we're leveraging Google Cloud Platform's robust AI and container services for a more scalable, cost-effective solution.
 
-* Employees lack visibility into career growth opportunities.
-* Managers spend significant time creating reviews and development plans.
-* HR struggles to analyze skill gaps across large workforces.
+## ✨ GCP Solution Benefits
 
----
+- **Vertex AI Integration**: Advanced Gemini AI models for natural language processing
+- **Cloud Run**: Serverless, auto-scaling container deployment
+- **Secret Manager**: Enterprise-grade secrets management
+- **Cloud Monitoring**: Comprehensive observability and alerting
+- **Artifact Registry**: Secure, private container registry
+- **Global Scale**: Multi-region deployment capabilities
 
-## ✅ Proposed Solution
+## 🏗️ Architecture Overview
 
-The **AI Career Companion** is a **prompt-first enterprise application** that:
-
-* Analyzes **skills gaps** for employees.
-* Generates **personalized upskilling plans**.
-* Assists managers with **performance reviews**.
-* Simulates **mentorship guidance**.
-
-It is implemented with **FastAPI + Azure OpenAI + MLflow + Key Vault + App Insights**, containerized, and deployed on **Azure Container Instances (ACI)**.
-
----
-
-## 🚀 Approach
-
-1. **Prompt-Centric Design**
-   Prompts are versioned and managed with MLflow. The backend dynamically loads prompts by alias.
-2. **Secure Integration**
-   Keys and secrets are stored in **Azure Key Vault**; credentials are handled via Service Principal.
-3. **Cloud-Native Deployment**
-   Backend packaged into Docker image → pushed to **ACR** → deployed to **ACI**.
-4. **Monitoring & Observability**
-   Telemetry captured via **Application Insights**.
-
----
+```
+Internet → Cloud Load Balancer → Cloud Run → Vertex AI (Gemini)
+                                      ↓
+                               Secret Manager ← Service Account
+                                      ↓
+                              Cloud Monitoring & Logging
+```
 
 ## 🔧 Prerequisites
 
-* **Azure CLI** installed and authenticated (`az login`)
-* **Docker** installed and running
-* **Python 3.10+** installed
-* **Append Learning** (for local development)
-* **jq** CLI (for parsing JSON outputs in shell scripts)
+- **Google Cloud CLI** installed and authenticated (`gcloud auth login`)
+- **Docker** installed and running
+- **Python 3.10+** installed
+- **Active GCP Project** with billing enabled
+- **Project Owner or Editor** IAM permissions
 
----
+## 📦 GCP Services Used
 
-## 📦 Azure Services Used
+| Service | Purpose | Pricing Model |
+|---------|---------|---------------|
+| **Cloud Run** | Serverless container hosting | Pay-per-request |
+| **Artifact Registry** | Private container registry | Storage + bandwidth |
+| **Secret Manager** | Secure secrets storage | Per secret version |
+| **Vertex AI** | Gemini AI model access | Per token/request |
+| **Cloud Monitoring** | Application monitoring | Free tier available |
+| **Cloud Logging** | Centralized logging | Free tier available |
+| **IAM & Service Accounts** | Authentication | Free |
 
-| Service                             | Purpose                                                                |
-| ----------------------------------- | ---------------------------------------------------------------------- |
-| **Azure Container Registry (ACR)**  | Store Docker images for backend.                                       |
-| **Azure Container Instances (ACI)** | Run containerized backend with public endpoint.                        |
-| **Azure Key Vault**                 | Store sensitive values (OpenAI API key, MLflow URI, App Insights key). |
-| **Azure OpenAI**                    | LLM inference with GPT-4o-mini deployment.                             |
-| **Application Insights**            | Monitor requests, latency, and logs.                                   |
+## 🚀 Quick Start Guide
 
-## Architecture
----
-<img src="project1_azure.png" alt="Architecture Diagram" width="700"/>
----
----
-
-## ⚙️ Environment Variables
-
-We will use a `.env` file to manage environment variables. The backend reads from this file automatically.
-
-* `OPENAI_ENDPOINT` → fetched automatically from Azure OpenAI resource.
-* `OPENAI_KEY` → stored in Key Vault, store Key Name in `.env`.
-* `APPINSIGHTS_KEY` → stored in Key Vault, store Key Name in `.env`.
-* `MLFLOW_TRACKING_URI` → stored in Key Vault, store Key Name in `.env`.
-* `KV_NAME` → name of your Key Vault.
-* `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_TENANT_ID` → Service Principal creds for accessing Key Vault.
-
----
-
-## 📝 Setup Guide
-
-### 1. Login & Variables
+### 1. Initial Setup
 
 ```bash
 # Clone and navigate to project
 cd ai-career-companion-gcp
 
 # Set your project ID
-export PROJECT_ID="bdc-trainings"
+export PROJECT_ID="your-unique-project-id"
 export REGION="us-central1"
 
 # Authenticate with GCP
 gcloud auth login
 gcloud config set project $PROJECT_ID
-
-```
-
-
-
-Fetch **OpenAI endpoint** dynamically:
-
-```bash
-OPENAI_ENDPOINT=$(az cognitiveservices account show \
-  --name $OPENAI_RESOURCE_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --query properties.endpoint -o tsv)
-
-OPENAI_KEY=$(az cognitiveservices account keys list \
-  --name $OPENAI_RESOURCE_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --query key1 -o tsv)
-
 ```
 
 ---
 
-### 2. Create Resources
+### 2. Enable APIs and Create Resources
 
 ```bash
-# Container Registry
-az acr create --resource-group $RESOURCE_GROUP --name $ACR_NAME --sku Basic --admin-enabled true
+# Enable required APIs
+gcloud services enable \
+    run.googleapis.com \
+    artifactregistry.googleapis.com \
+    secretmanager.googleapis.com \
+    aiplatform.googleapis.com \
+    monitoring.googleapis.com \
+    logging.googleapis.com \
+    cloudbuild.googleapis.com
 
-# Key Vault
-az keyvault create --name $KV_NAME --resource-group $RESOURCE_GROUP --location $LOCATION
+# Create Artifact Registry repository
+gcloud artifacts repositories create $REPOSITORY_NAME \
+    --repository-format=docker \
+    --location=$REGION \
+    --description="AI Career Companion container repository"
 
-
-# App Insights
-az monitor app-insights component create --app $APPINSIGHTS_NAME --location $LOCATION \
-  --resource-group $RESOURCE_GROUP
+# Create service account
+gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+    --display-name="AI Career Companion Service Account" \
+    --description="Service account for AI Career Companion application"
 ```
 
 ---
 
-### 3. Store Secrets in Key Vault
+### 3. Grant IAM Permissions
 
 ```bash
-# Store OpenAI Key
-az keyvault secret set --vault-name $KV_NAME --name "OpenAIKey" --value "$OPENAI_KEY"
+# Grant necessary IAM roles
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor"
 
-# Store MLflow URI
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/aiplatform.user"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/monitoring.metricWriter"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/logging.logWriter"
+```
+
+---
+
+### 4. Store Secrets in Secret Manager
+
+First, obtain your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey).
+
+```bash
+# Store Gemini API key
+echo -n "YOUR_ACTUAL_GEMINI_API_KEY" | gcloud secrets create gemini-api-key \
+    --data-file=- \
+    --project=$PROJECT_ID
+
+# Store MLflow URI (if using external MLflow)
 MLFLOW_TRACKING_URI="http://20.75.92.162:5000/"
-az keyvault secret set --vault-name $KV_NAME --name "MLflowTrackingURI" --value "$MLFLOW_TRACKING_URI"
-
-# Store App Insights Key
-APP_INSIGHTS_KEY=$(az monitor app-insights component show --app $APPINSIGHTS_NAME \
-  --resource-group $RESOURCE_GROUP --query instrumentationKey -o tsv)
-az keyvault secret set --vault-name $KV_NAME --name "AppInsightsKey" --value "$APP_INSIGHTS_KEY"
+echo -n "$MLFLOW_TRACKING_URI" | gcloud secrets create mlflow-tracking-uri \
+    --data-file=- \
+    --project=$PROJECT_ID
 ```
 
 ---
 
-### 4. Create Service Principal for Key Vault Access
+### 5. Create Environment Configuration
+Make sure the current location on the terminal is Project-AI_Career_Companion folder, so that .env should be created in that folder.
 
 ```bash
-az ad sp create-for-rbac -n $SP \
-  --role "Key Vault Secrets User" \
-  --scopes $(az keyvault show -n $KV_NAME --query id -o tsv) \
-  --sdk-auth > sp.json
+cat <<EOF > .env.gcp
+# GCP Configuration
+GOOGLE_CLOUD_PROJECT=$PROJECT_ID
 
-AZURE_CLIENT_ID=$(jq -r .clientId sp.json)
-AZURE_CLIENT_SECRET=$(jq -r .clientSecret sp.json)
-AZURE_TENANT_ID=$(jq -r .tenantId sp.json)
-```
-
-
----
-
-### 5. Create `.env` File
-Make sure the current locaiton on the terminal is Project-AI_Career_Companion folder, so that .env should be created in that folder, it should not overwrite your actual .env from main repo.
-
-```bash
-cat <<EOF > .env
-
-AZURE_OPENAI_ENDPOINT=$OPENAI_ENDPOINT
-AZURE_OPENAI_DEPLOYMENT_NAME=$OPENAI_DEPLOYMENT_NAME
-AZURE_OPENAI_API_VERSION="2024-08-01-preview"
-AZURE_OPENAI_API_VERSION="2024-08-01-preview"
-OPENAI_API_VERSION="2024-08-01-preview"
-
-KV_NAME=$KV_NAME
-RESOURCE_GROUP=Tredence-b4
-LOCATION=eastus
-
-# App Configuration
+# Application Configuration
 APP_ENV=development
-API_PORT=8000
+API_PORT=8080
 SESSION_TIMEOUT_MINUTES=30
 
-# Service Principal creds
-AZURE_CLIENT_ID=$AZURE_CLIENT_ID
-AZURE_CLIENT_SECRET=$AZURE_CLIENT_SECRET
-AZURE_TENANT_ID=$AZURE_TENANT_ID
+# MLflow Configuration
+MLFLOW_TRACKING_URI=http://20.75.92.162:5000/
+
+# Region
+GCP_REGION=$REGION
 EOF
 ```
-
 
 ---
 
@@ -199,8 +159,8 @@ Make sure the environment location is outside the Project-AI_Career_Companion fo
 
 ```bash
 cd ..
-python3 -m venv p1env
-source p1env/bin/activate
+python3 -m venv gcpenv
+source gcpenv/bin/activate
 cd Project-AI_Career_Companion/backend
 pip install -r requirements.txt
 ```
@@ -210,13 +170,15 @@ pip install -r requirements.txt
 ### 7. Run Backend Locally
 
 ```bash
-uvicorn main:app --reload --port 8000
+# Copy GCP environment file
+cp .env.gcp .env
+
+# Run locally
+uvicorn main:app --reload --port 8080
 ```
 
-* Test health: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
-* Open API docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-
-  * Try `/health` and `/generate_plan` directly.
+* Test health: [http://127.0.0.1:8080/health](http://127.0.0.1:8080/health)
+* Open API docs: [http://127.0.0.1:8080/docs](http://127.0.0.1:8080/docs)
 
 ---
 
@@ -224,93 +186,304 @@ uvicorn main:app --reload --port 8000
 
 Start a New Terminal, navigate to `frontend` folder, and run:
 ```bash
-python -m http.server 8080
+python -m http.server 8081
 ```
 
-Open browser: [http://127.0.0.1:8080](http://127.0.0.1:8080)
+Open browser: [http://127.0.0.1:8081](http://127.0.0.1:8081)
 
 ---
 
 ### 9. Build & Test Docker Image
-Make sure the current location is Project-AI_career_companion
+Make sure the current location is Project-AI_Career_Companion
 
 ```bash
-DOCKER_IMAGE=career-backend-$NAME
+DOCKER_IMAGE=career-backend-gcp
 
-# Build
+# Build using GCP Dockerfile
 cd ..
-docker build -f Dockerfile -t $DOCKER_IMAGE .
+docker build -f Dockerfile.gcp -t $DOCKER_IMAGE .
 
-# Run locally with .env
-docker run -p 8000:8000 -p 8080:8080 --name $DOCKER_IMAGE-container $DOCKER_IMAGE
+# Run locally
+docker run -p 8080:8080 --name $DOCKER_IMAGE-container \
+  -e GOOGLE_CLOUD_PROJECT=$PROJECT_ID \
+  -e APP_ENV=development \
+  $DOCKER_IMAGE
 
 # Test
-curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8080/health
 ```
 
 ---
 
-### 10. Push Image to ACR
+### 10. Push Image to Artifact Registry
 
 ```bash
-# login to ACR
+# Configure Docker authentication
+gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
-ACR_USERNAME=$(az acr credential show --name $ACR_NAME --query "username" -o tsv)
-ACR_PASSWORD=$(az acr credential show --name $ACR_NAME --query "passwords[0].value" -o tsv)
-sudo az acr login -n $ACR_NAME -u $ACR_USERNAME -p $ACR_PASSWORD
-az acr update -n $ACR_NAME --admin-enabled true  
-
-# push backend image to ACR
-docker tag $DOCKER_IMAGE $ACR_NAME.azurecr.io/$DOCKER_IMAGE:latest
-sudo docker push $ACR_NAME.azurecr.io/$DOCKER_IMAGE:latest 
-
-
-```
-
-
-
----
-
-### 11. Deploy to ACI
-
-```bash
-az container create -g $RESOURCE_GROUP -n $ACI_NAME \
-  --image $ACR_NAME.azurecr.io/$DOCKER_IMAGE:latest \
-  --registry-login-server $ACR_NAME.azurecr.io \
-  --registry-username $(az acr credential show -n $ACR_NAME --query username -o tsv) \
-  --registry-password $(az acr credential show -n $ACR_NAME --query passwords[0].value -o tsv) \
-  --cpu 1 --memory 1 --os-type Linux \
-  --ports 8000 8080 --ip-address public \
-  --dns-name-label aicareer-demo-$NAME
-
-
-# check list of containers on ACI
-az container list -g $RESOURCE_GROUP -o table
-
-```
-
-Get public URL:
-
-```bash
-az container show -g $RESOURCE_GROUP -n $ACI_NAME --query ipAddress.fqdn -o tsv
+# Tag and push image
+IMAGE_URL="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:latest"
+docker tag $DOCKER_IMAGE $IMAGE_URL
+docker push $IMAGE_URL
 ```
 
 ---
 
-### 12. Cleanup
+### 11. Deploy to Cloud Run
 
 ```bash
-# Delete ACI
-az container delete -g $RESOURCE_GROUP -n $ACI_NAME -y
+gcloud run deploy $SERVICE_NAME \
+    --image=$IMAGE_URL \
+    --platform=managed \
+    --region=$REGION \
+    --allow-unauthenticated \
+    --service-account="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --set-env-vars="GOOGLE_CLOUD_PROJECT=${PROJECT_ID},APP_ENV=production" \
+    --memory=4Gi \
+    --cpu=2 \
+    --timeout=300 \
+    --concurrency=100 \
+    --max-instances=10 \
+    --port=8080
 
-# Delete ACR
-az acr delete -n $ACR_NAME -g $RESOURCE_GROUP -y
+# Get the service URL
+SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format="value(status.url)")
 
-# Delete Key Vault
-az keyvault delete -n $KV_NAME -g $RESOURCE_GROUP
-
-# Delete App Insights
-az monitor app-insights component delete --app $APPINSIGHTS_NAME --resource-group $RESOURCE_GROUP
+echo "Deployment completed!"
+echo "Service URL: $SERVICE_URL"
+echo "Health check: $SERVICE_URL/health"
+echo "API documentation: $SERVICE_URL/docs"
 ```
 
 ---
+
+### 12. Test Deployment
+
+```bash
+# Test health endpoint
+curl $SERVICE_URL/health
+
+# Test skills analysis endpoint
+curl -X POST $SERVICE_URL/analyze_skills \
+  -H "Content-Type: application/json" \
+  -d '{
+    "current_role": "Junior Developer",
+    "target_role": "Senior Developer",
+    "skills": ["Python", "Git"],
+    "desired_skills": ["Docker", "Kubernetes", "System Design"]
+  }'
+```
+
+---
+
+### 13. Monitoring and Observability
+
+#### View Cloud Run Logs
+```bash
+# Stream live logs
+gcloud run services logs tail $SERVICE_NAME --region=$REGION
+
+# View recent logs
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=$SERVICE_NAME" --limit=50
+```
+
+#### View Metrics in Cloud Monitoring
+```bash
+# Open Cloud Monitoring dashboard
+echo "View metrics at: https://console.cloud.google.com/monitoring/dashboards"
+
+# Create custom metric filters
+gcloud logging read "resource.type=cloud_run_revision AND jsonPayload.message:\"Skills gap analysis\"" --limit=10
+```
+
+---
+
+### 14. Cleanup
+
+```bash
+# Delete Cloud Run service
+gcloud run services delete $SERVICE_NAME --region=$REGION --quiet
+
+# Delete Artifact Registry repository
+gcloud artifacts repositories delete $REPOSITORY_NAME --location=$REGION --quiet
+
+# Delete secrets
+gcloud secrets delete gemini-api-key --quiet
+gcloud secrets delete mlflow-tracking-uri --quiet
+
+# Delete service account
+gcloud iam service-accounts delete ${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com --quiet
+
+echo "Cleanup completed!"
+```
+
+---
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+1. **Authentication Issues**
+```bash
+# Re-authenticate
+gcloud auth login
+gcloud auth application-default login
+
+# Check current project
+gcloud config get-value project
+```
+
+2. **Service Account Permissions**
+```bash
+# Check current IAM bindings
+gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --filter="bindings.members:${SERVICE_ACCOUNT_NAME}@*"
+```
+
+3. **Secret Manager Access**
+```bash
+# Test secret access
+gcloud secrets versions access latest --secret="gemini-api-key"
+```
+
+4. **Container Registry Authentication**
+```bash
+# Re-authenticate Docker
+gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+```
+
+### Debug Mode
+
+Enable debug logging:
+```bash
+gcloud run services update $SERVICE_NAME \
+    --region=$REGION \
+    --set-env-vars="LOG_LEVEL=DEBUG"
+```
+
+---
+
+## 🚀 Advanced Features
+
+### 1. Multi-Region Deployment
+
+```bash
+# Deploy to additional regions
+SECONDARY_REGION="us-west1"
+
+gcloud run deploy $SERVICE_NAME \
+    --image=$IMAGE_URL \
+    --region=$SECONDARY_REGION \
+    --allow-unauthenticated \
+    --service-account="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+```
+
+### 2. Load Balancing with Cloud Load Balancer
+
+```bash
+# Create global load balancer for multi-region setup
+gcloud compute backend-services create career-companion-backend \
+    --global \
+    --protocol=HTTP \
+    --health-checks=career-companion-health-check
+```
+
+### 3. Custom Domain Setup
+
+```bash
+# Map custom domain
+gcloud run domain-mappings create \
+    --service=$SERVICE_NAME \
+    --domain=career-companion.yourdomain.com \
+    --region=$REGION
+```
+
+---
+
+## 💰 Cost Optimization
+
+### Resource Limits
+```bash
+# Deploy with cost-optimized settings
+gcloud run deploy $SERVICE_NAME \
+    --image=$IMAGE_URL \
+    --region=$REGION \
+    --cpu=1 \
+    --memory=2Gi \
+    --concurrency=80 \
+    --max-instances=5 \
+    --min-instances=0 \
+    --cpu-throttling
+```
+
+### Budget Alerts
+```bash
+# Set up budget alerts (requires billing account ID)
+gcloud billing budgets create \
+    --billing-account=YOUR_BILLING_ACCOUNT_ID \
+    --display-name="Career Companion Budget" \
+    --budget-amount=50USD \
+    --threshold-rule=percent=90,spend-basis=CURRENT_SPEND
+```
+
+---
+
+## 📚 Additional Resources
+
+- [Cloud Run Documentation](https://cloud.google.com/run/docs)
+- [Vertex AI Documentation](https://cloud.google.com/vertex-ai/docs)
+- [Secret Manager Best Practices](https://cloud.google.com/secret-manager/docs/best-practices)
+- [Cloud Monitoring Guides](https://cloud.google.com/monitoring/docs)
+- [GCP Cost Optimization](https://cloud.google.com/cost-optimization)
+
+---
+
+## 🎯 Next Steps
+
+1. **Enhanced Features**
+   - Add user authentication with Firebase Auth
+   - Implement caching with Memorystore (Redis)
+   - Add database persistence with Cloud SQL
+   - Integrate with Workspace APIs
+
+2. **Production Readiness**
+   - Set up proper CI/CD pipelines with Cloud Build
+   - Implement comprehensive monitoring dashboards
+   - Add performance testing with Cloud Load Testing
+   - Configure backup and disaster recovery strategies
+
+3. **Scaling Considerations**
+   - Multi-region deployment strategy
+   - CDN integration with Cloud CDN
+   - Auto-scaling policies and resource optimization
+   - Advanced security with Cloud Armor
+
+---
+```
+
+## 📚 Additional Resources
+
+- [Cloud Run Documentation](https://cloud.google.com/run/docs)
+- [Vertex AI Documentation](https://cloud.google.com/vertex-ai/docs)
+- [Secret Manager Best Practices](https://cloud.google.com/secret-manager/docs/best-practices)
+- [Cloud Monitoring Guides](https://cloud.google.com/monitoring/docs)
+- [GCP Cost Optimization](https://cloud.google.com/cost-optimization)
+
+## 🎯 Next Steps
+
+1. **Enhanced Features**
+   - Add user authentication with Firebase Auth
+   - Implement caching with Memorystore (Redis)
+   - Add database persistence with Cloud SQL
+   - Integrate with Workspace APIs
+
+2. **Production Readiness**
+   - Set up proper CI/CD pipelines
+   - Implement comprehensive monitoring
+   - Add performance testing
+   - Configure backup strategies
+
+3. **Scaling Considerations**
+   - Multi-region deployment
+   - CDN integration with Cloud CDN
+   - Load balancing with Cloud Load Balancer
+   - Auto-scaling policies
