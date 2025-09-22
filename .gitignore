@@ -2,6 +2,7 @@
 genai
 gcloudpublickey
 mlruns
+VectorDB_Chroma
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
