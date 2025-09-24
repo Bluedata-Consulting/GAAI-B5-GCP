@@ -1,0 +1,242 @@
+[
+  {
+    "doc_id": "KB001",
+    "question": "What are best practices for debugging?",
+    "answer_snippet": "When addressing debugging, it's important to follow well-defined patterns...",
+    "source": "debugging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-01-10"
+  },
+  {
+    "doc_id": "KB002",
+    "question": "What are best practices for performance tuning?",
+    "answer_snippet": "When addressing performance tuning, it's important to follow well-defined patterns...",
+    "source": "performance tuning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-02-10"
+  },
+  {
+    "doc_id": "KB003",
+    "question": "What are best practices for caching?",
+    "answer_snippet": "When addressing caching, it's important to follow well-defined patterns...",
+    "source": "caching_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-03-10"
+  },
+  {
+    "doc_id": "KB004",
+    "question": "What are best practices for asynchronous programming?",
+    "answer_snippet": "When addressing asynchronous programming, it's important to follow well-defined patterns...",
+    "source": "asynchronous programming_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-04-10"
+  },
+  {
+    "doc_id": "KB005",
+    "question": "What are best practices for API versioning?",
+    "answer_snippet": "When addressing API versioning, it's important to follow well-defined patterns...",
+    "source": "API versioning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-05-10"
+  },
+  {
+    "doc_id": "KB006",
+    "question": "What are best practices for unit testing?",
+    "answer_snippet": "When addressing unit testing, it's important to follow well-defined patterns...",
+    "source": "unit testing_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-06-10"
+  },
+  {
+    "doc_id": "KB007",
+    "question": "What are best practices for CI/CD?",
+    "answer_snippet": "When addressing CI/CD, it's important to follow well-defined patterns...",
+    "source": "CI/CD_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-01-10"
+  },
+  {
+    "doc_id": "KB008",
+    "question": "What are best practices for logging?",
+    "answer_snippet": "When addressing logging, it's important to follow well-defined patterns...",
+    "source": "logging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-02-10"
+  },
+  {
+    "doc_id": "KB009",
+    "question": "What are best practices for error handling?",
+    "answer_snippet": "When addressing error handling, it's important to follow well-defined patterns...",
+    "source": "error handling_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-03-10"
+  },
+  {
+    "doc_id": "KB010",
+    "question": "What are best practices for rate limiting?",
+    "answer_snippet": "When addressing rate limiting, it's important to follow well-defined patterns...",
+    "source": "rate limiting_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-04-10"
+  },
+  {
+    "doc_id": "KB011",
+    "question": "What are best practices for debugging?",
+    "answer_snippet": "When addressing debugging, it's important to follow well-defined patterns...",
+    "source": "debugging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-05-10"
+  },
+  {
+    "doc_id": "KB012",
+    "question": "What are best practices for performance tuning?",
+    "answer_snippet": "When addressing performance tuning, it's important to follow well-defined patterns...",
+    "source": "performance tuning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-06-10"
+  },
+  {
+    "doc_id": "KB013",
+    "question": "What are best practices for caching?",
+    "answer_snippet": "When addressing caching, it's important to follow well-defined patterns...",
+    "source": "caching_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-01-10"
+  },
+  {
+    "doc_id": "KB014",
+    "question": "What are best practices for asynchronous programming?",
+    "answer_snippet": "When addressing asynchronous programming, it's important to follow well-defined patterns...",
+    "source": "asynchronous programming_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-02-10"
+  },
+  {
+    "doc_id": "KB015",
+    "question": "What are best practices for API versioning?",
+    "answer_snippet": "When addressing API versioning, it's important to follow well-defined patterns...",
+    "source": "API versioning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-03-10"
+  },
+  {
+    "doc_id": "KB016",
+    "question": "What are best practices for unit testing?",
+    "answer_snippet": "When addressing unit testing, it's important to follow well-defined patterns...",
+    "source": "unit testing_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-04-10"
+  },
+  {
+    "doc_id": "KB017",
+    "question": "What are best practices for CI/CD?",
+    "answer_snippet": "When addressing CI/CD, it's important to follow well-defined patterns...",
+    "source": "CI/CD_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-05-10"
+  },
+  {
+    "doc_id": "KB018",
+    "question": "What are best practices for logging?",
+    "answer_snippet": "When addressing logging, it's important to follow well-defined patterns...",
+    "source": "logging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-06-10"
+  },
+  {
+    "doc_id": "KB019",
+    "question": "What are best practices for error handling?",
+    "answer_snippet": "When addressing error handling, it's important to follow well-defined patterns...",
+    "source": "error handling_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-01-10"
+  },
+  {
+    "doc_id": "KB020",
+    "question": "What are best practices for rate limiting?",
+    "answer_snippet": "When addressing rate limiting, it's important to follow well-defined patterns...",
+    "source": "rate limiting_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-02-10"
+  },
+  {
+    "doc_id": "KB021",
+    "question": "What are best practices for debugging?",
+    "answer_snippet": "When addressing debugging, it's important to follow well-defined patterns...",
+    "source": "debugging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-03-10"
+  },
+  {
+    "doc_id": "KB022",
+    "question": "What are best practices for performance tuning?",
+    "answer_snippet": "When addressing performance tuning, it's important to follow well-defined patterns...",
+    "source": "performance tuning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-04-10"
+  },
+  {
+    "doc_id": "KB023",
+    "question": "What are best practices for caching?",
+    "answer_snippet": "When addressing caching, it's important to follow well-defined patterns...",
+    "source": "caching_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-05-10"
+  },
+  {
+    "doc_id": "KB024",
+    "question": "What are best practices for asynchronous programming?",
+    "answer_snippet": "When addressing asynchronous programming, it's important to follow well-defined patterns...",
+    "source": "asynchronous programming_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-06-10"
+  },
+  {
+    "doc_id": "KB025",
+    "question": "What are best practices for API versioning?",
+    "answer_snippet": "When addressing API versioning, it's important to follow well-defined patterns...",
+    "source": "API versioning_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-01-10"
+  },
+  {
+    "doc_id": "KB026",
+    "question": "What are best practices for unit testing?",
+    "answer_snippet": "When addressing unit testing, it's important to follow well-defined patterns...",
+    "source": "unit testing_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-02-10"
+  },
+  {
+    "doc_id": "KB027",
+    "question": "What are best practices for CI/CD?",
+    "answer_snippet": "When addressing CI/CD, it's important to follow well-defined patterns...",
+    "source": "CI/CD_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-03-10"
+  },
+  {
+    "doc_id": "KB028",
+    "question": "What are best practices for logging?",
+    "answer_snippet": "When addressing logging, it's important to follow well-defined patterns...",
+    "source": "logging_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-04-10"
+  },
+  {
+    "doc_id": "KB029",
+    "question": "What are best practices for error handling?",
+    "answer_snippet": "When addressing error handling, it's important to follow well-defined patterns...",
+    "source": "error handling_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-05-10"
+  },
+  {
+    "doc_id": "KB030",
+    "question": "What are best practices for rate limiting?",
+    "answer_snippet": "When addressing rate limiting, it's important to follow well-defined patterns...",
+    "source": "rate limiting_guide.md",
+    "confidence_indicator": "moderate",
+    "last_updated": "2024-06-10"
+  }
+]
