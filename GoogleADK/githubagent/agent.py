@@ -13,8 +13,8 @@ if not GITHUB_PERSONAL_ACCESS_TOKEN:
 
 
 server_params = {
-        "command": "cmd",
-        "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github", "stdio"],
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github", "stdio"],
         "env": {**os.environ, "GITHUB_TOKEN": GITHUB_PERSONAL_ACCESS_TOKEN},
     }
 
@@ -32,7 +32,7 @@ instruction = (
 
 root_agent = LlmAgent(
     name="github_agent",
-    model="gemini-1.5-flash",
+    model="gemini-2.0-flash",
     instruction=instruction,
     tools=[github_toolset],
 )
