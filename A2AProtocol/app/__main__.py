@@ -8,7 +8,7 @@ import uvicorn
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
-from a2a.server.tasks import InMemoryPushNotifier, InMemoryTaskStore
+from a2a.server.tasks import InMemoryPushNotificationConfigStore, BasePushNotificationSender, InMemoryTaskStore
 from a2a.types import (
     AgentCapabilities,
     AgentCard,
@@ -36,21 +36,7 @@ class MissingAPIKeyError(Exception):
 def main(host, port):
     """Starts the Currency Agent server."""
     try:
-        if os.getenv('model_source',"azure") == "azure":
-           if not os.getenv('AZURE_OPENAI_API_KEY'):
-               raise MissingAPIKeyError(
-                   'AZURE_OPENAI_API_KEY environment variable not set.'
-               )
-        else:
-            
-            if not os.getenv('TOOL_LLM_URL'):
-                raise MissingAPIKeyError(
-                    'TOOL_LLM_URL environment variable not set.'
-                )
-            if not os.getenv('TOOL_LLM_NAME'):
-                raise MissingAPIKeyError(
-                    'TOOL_LLM_NAME environment not variable not set.'
-                )
+        
     
         capabilities = AgentCapabilities(streaming=True, pushNotifications=True)
         skill = AgentSkill(
@@ -73,10 +59,13 @@ def main(host, port):
 
         # --8<-- [start:DefaultRequestHandler]
         httpx_client = httpx.AsyncClient()
+        push_config_store = InMemoryPushNotificationConfigStore()
+        push_sender = BasePushNotificationSender(httpx_client=httpx_client,config_store=push_config_store)
         request_handler = DefaultRequestHandler(
             agent_executor=CurrencyAgentExecutor(),
             task_store=InMemoryTaskStore(),
-            push_notifier=InMemoryPushNotifier(httpx_client),
+            push_config_store=push_config_store,
+            push_sender = push_sender
         )
         server = A2AStarletteApplication(
             agent_card=agent_card, http_handler=request_handler

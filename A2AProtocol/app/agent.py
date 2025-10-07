@@ -6,8 +6,8 @@ import os
 
 from langchain_core.messages import AIMessage, ToolMessage
 from langchain_core.tools import tool
-from langchain_openai import AzureChatOpenAI
-from langchain_openai import ChatOpenAI
+
+from langchain.chat_models import init_chat_model
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from pydantic import BaseModel
@@ -73,16 +73,8 @@ class CurrencyAgent:
     )
 
     def __init__(self):
-        model_source = os.getenv("model_source", "azure")
-        if model_source == "azure":
-            self.model = AzureChatOpenAI(model='myllm')
-        else:
-            self.model = ChatOpenAI(
-                 model=os.getenv("TOOL_LLM_NAME"),
-                 openai_api_key=os.getenv("API_KEY", "EMPTY"),
-                 openai_api_base=os.getenv("TOOL_LLM_URL"),
-                 temperature=0
-             )
+        
+        self.model = init_chat_model(model='gemini-2.0-flash',model_provider='google_genai')
         self.tools = [get_exchange_rate]
 
         self.graph = create_react_agent(

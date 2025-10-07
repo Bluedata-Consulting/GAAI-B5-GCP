@@ -45,9 +45,9 @@ class CurrencyAgentExecutor(AgentExecutor):
         if not task:
             task = new_task(context.message)
             await event_queue.enqueue_event(task)
-        updater = TaskUpdater(event_queue, task.id, task.contextId)
+        updater = TaskUpdater(event_queue, task.id, task.context_id)
         try:
-            async for item in self.agent.stream(query, task.contextId):
+            async for item in self.agent.stream(query, task.context_id):
                 is_task_complete = item['is_task_complete']
                 require_user_input = item['require_user_input']
 
@@ -56,7 +56,7 @@ class CurrencyAgentExecutor(AgentExecutor):
                         TaskState.working,
                         new_agent_text_message(
                             item['content'],
-                            task.contextId,
+                            task.context_id,
                             task.id,
                         ),
                     )
@@ -65,7 +65,7 @@ class CurrencyAgentExecutor(AgentExecutor):
                         TaskState.input_required,
                         new_agent_text_message(
                             item['content'],
-                            task.contextId,
+                            task.context_id,
                             task.id,
                         ),
                         final=True,

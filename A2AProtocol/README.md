@@ -56,7 +56,8 @@ sequenceDiagram
 
 - pip installations: 
 ```bash
-pip install -r a2a-sdk langchain-google-genai langgraph langchain-openai pydantic python-dotenv uvicorn
+sudo apt install uvicorn -y
+pip install a2a-sdk langchain-google-genai langgraph pydantic python-dotenv uvicorn uv
 
 ```
 

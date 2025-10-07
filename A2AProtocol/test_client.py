@@ -55,7 +55,7 @@ async def main() -> None:
                 '\nUsing PUBLIC agent card for client initialization (default).'
             )
 
-            if _public_card.supportsAuthenticatedExtendedCard:
+            if _public_card.supports_authenticated_extended_card:
                 try:
                     logger.info(
                         '\nPublic card supports authenticated extended card. '
@@ -147,7 +147,7 @@ async def main() -> None:
 
 
         task_id = response.root.result.id
-        contextId =response.root.result.contextId
+        contextId =response.root.result.context_id
 
         second_send_message_payload_multiturn: dict[str, Any] = {
             'message': {
