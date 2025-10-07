@@ -172,7 +172,7 @@ def analyze_webpage_and_determine_action(
     return analysis_prompt
 
 
-search_results_agent = Agent(
+root_agent = Agent(
     model=constants.MODEL,
     name="search_results_agent",
     description="Get top 3 search results info for a keyword using web browsing",

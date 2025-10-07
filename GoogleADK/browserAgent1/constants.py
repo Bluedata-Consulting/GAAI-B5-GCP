@@ -7,8 +7,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
-AGENT_NAME = "brand_search_optimization"
-DESCRIPTION = "A helpful assistant for brand search optimization."
+AGENT_NAME = "browser_agent"
+DESCRIPTION = "A helpful assistant for internet search via browser"
 PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT", "EMPTY")
 LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "global")
 MODEL = os.getenv("MODEL", "gemini-2.5-flash")
