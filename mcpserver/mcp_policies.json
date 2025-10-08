@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "name": "mcp-default-policy",
+  "description": "Default policy for a MCP server",
+  "rules": [
+    {
+      "name": "unrestricted-access",
+      "description": "All principals can list and execute tools, resources, and prompts",
+      "effect": "allow",
+      "principal_conditions": [],
+      "resource_conditions": [{"path":"attributes.name","operator":"in","value":["add"]}],
+      "actions": [
+        "list","execute"
+      ]
+    }
+  ],
+  "default_effect": "deny"
+}
